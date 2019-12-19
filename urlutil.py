@@ -12,8 +12,10 @@ import requests
 
 class Urlutil:
 	def __init__(self, url_ref = ""):
-		self.ua = ['Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100',
-					'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36']
+		self.ua = [
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100',
+			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
+		]
 		self.setOpener(url_ref)
 	
 	def setOpener(self, url_ref):
@@ -23,7 +25,7 @@ class Urlutil:
 		opener.addheaders = [('Referer',url_ref)]
 		urllib.request.install_opener(opener)
 	
-	def getSoup(self, url_soup, tag, attr = None, query = None):
+	def getSoup(self, url_soup):
 		try:
 			from bs4 import BeautifulSoup
 		except Exception as e:
@@ -36,6 +38,9 @@ class Urlutil:
 			return None
 		html = response.read().decode('utf-8', errors='ignore')
 		soup = BeautifulSoup(html, 'html.parser')
+		return soup
+	
+	def findTag(self, soup, tag, attr = None, query = None):
 		try:
 			if attr is "href":
 				pages = soup.find_all(tag, href=re.compile(query))
@@ -139,10 +144,6 @@ def _parser():
 
 def _main():
 	import sys,datetime
-	datetime_format = datetime.date.today()
-	datetime_format = datetime_format - datetime.timedelta(days=1)
-	datetime_today = datetime_format.strftime("%Y%m%d")
-	check_link(url)
 
 if __name__ == '__main__':
 	logger = _logger()
