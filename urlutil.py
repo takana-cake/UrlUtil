@@ -1,8 +1,7 @@
-'''
-#v.20191216.0
+#v.20191230.0
 # -*- coding: utf-8 -*-
 
-import re, glob
+import re, glob, os
 from logging import getLogger, handlers, Formatter, StreamHandler, DEBUG
 import argparse
 import urllib.request
@@ -44,6 +43,8 @@ class Urlutil:
 		try:
 			if attr is "href":
 				pages = soup.find_all(tag, href=re.compile(query))
+			elif attr is "src":
+				pages = soup.find_all(tag, src=re.compile(query))
 			elif attr is "class":
 				pages = soup.find_all(tag, class_=re.compile(query))
 			elif attr is "title":
@@ -77,20 +78,39 @@ class Urlutil:
 			logger.debug('checkLink: ' + str(e))
 			return None
 	
+	def getTicket(self, url_page, url_wild):
+		if os.path.dirname(url_page) in url_wild:
+			url_wild = url_wild.replace(os.path.dirname(url_page) + "/", "")
+		self.setOpener(url_page)
+		soup = self.getSoup(url_page)
+		pages = self.findTag(soup, "img", attr = "src", query = url_wild)
+		for i in pages:
+			print(i)
+	
+	def getImgs(self, url_page, path):
+		self.setOpener(url_page)
+		soup = self.getSoup(url_page)
+		pages = self.findTag(soup, "img", attr = "src")
+		for i in pages:
+			if "http" in i["src"]:
+				url_file = i["src"]
+			else:
+				url_file = os.path.dirname(url_page) + "/" + i["src"]
+			download(url_file, path, os.path.basename(i["src"]))
+	
 	def postPass(self, url_post, params):
 		#link = self.getSoup(url_post, "input", "type", "password")
 		#for i in link:
 		#	print(i)
 		s = requests.Session()
-		#params={'username':'user','password':'pass','mode':'login'})
+		#params={'username':'user','password':'pass','mode':'login'}
 		r = s.post(url_post, params=params)
 		res = requests.get()
 		with open(pwd + file_name, 'w') as f:
 		       f.write(r.text)
 		return r
-	
 
-def download(url, path, file_name):
+def download(url_file, path, file_name):
 	file_name = re.sub(r'[\\|/|:|?|.|"|<|>|\|]', '-', file_name)
 	if file_name[0] == "/":
 		file_name = file_name[1:]
@@ -99,18 +119,19 @@ def download(url, path, file_name):
 	if glob.glob(path + file_name + "*"):
 		print(file_name + " exitsts.")
 	try:
-		urllib.request.urlretrieve(dl_url, path + file_name)
+		urllib.request.urlretrieve(url_file, path + file_name)
 	except Exception as e:
 		logger.debug('download: ' + str(e))
 	
-def help():
+def _help():
 	print("""class
 	Urlutil()
 method
-	referer(url_ref)	Set referer.
-	getSoup(url, tag, attr = None, que = None)	Return pages.
-	checkLink(url)		Return local-links.
-	post(url, post)		Return response.
+	setOpener(url_ref)	Build opener.
+	getSoup(url, tag, attr = None, que = None)		Return soup.
+	findTag(soup, tag, attr = None, query = None)	Find tag,attr,search-query on soup.
+	checkLink(url)		Return local-links.		Check local-link, return list.
+	postPass(url_post, params)		Return response. eg, {'username':'user','password':'pass','mode':'login'}
 function
 	download(url, path, file_name)""")
 
@@ -130,8 +151,9 @@ def _logger():
 
 def _parser():
 	parser = argparse.ArgumentParser(
-		usage="""twiutil.py getUserMedia [screen_name]
-	twiutil.py searchWord2Json [screen_name] --keyword '<search_word> --output <output_file>'""",
+		usage="""python3 urlutil.py mode
+	python3 urlutil.py 
+	python3 urlutil.py searchWord2Json [screen_name] --keyword '<search_word> --output <output_file>'""",
 		add_help=True,
 		formatter_class=argparse.RawTextHelpFormatter
 	)
@@ -143,12 +165,11 @@ def _parser():
 	return parser.parse_args()
 
 def _main():
-	import sys,datetime
+	pass
 
 if __name__ == '__main__':
 	logger = _logger()
 	_main()
 else:
 	logger = _logger()
-	help()
-'''
+	_help()
