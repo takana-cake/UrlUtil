@@ -20,5 +20,6 @@ flask</br>
 [リファラー（Referrer） | 用語集 | ミツエーリンクス](https://www.mitsue.co.jp/case/glossary/l_011.html)</br>
 [【Python】requestsでボタンを擬似クリック - .rute1/](https://rutei.hatenablog.com/entry/2018/11/30/205517)</br>
 
-
+[Python FlaskでローカルWebサーバー構築 - Qiita](https://qiita.com/sugx2/items/1a5573b8c4b482369411)</br>
+[Python Flask, GET, POST 基本動作メモ - Qiita](https://qiita.com/mtb_beta/items/d257519b018b8cd0cc2e)</br>
 
