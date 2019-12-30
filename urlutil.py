@@ -1,4 +1,4 @@
-#v.20191230.
+#v.20191230.2
 # -*- coding: utf-8 -*-
 
 import re, glob, os
