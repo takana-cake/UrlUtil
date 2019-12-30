@@ -1,5 +1,4 @@
-$ cat app/urlutil.py
-#v.20191230.1
+#v.20191230.
 # -*- coding: utf-8 -*-
 
 import re, glob, os
