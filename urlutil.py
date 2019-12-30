@@ -1,4 +1,4 @@
-#v.20191230.2
+#v.20191231.0
 # -*- coding: utf-8 -*-
 
 import re, glob, os
@@ -123,17 +123,17 @@ def download(url_file, path, file_name):
 	except Exception as e:
 		logger.debug('download: ' + str(e))
 
-def _help():
+def help():
 	print("""class
 	Urlutil()
 method
-	setOpener(url_ref)      Build opener.
-	getSoup(url)	      Return soup.
-	findTag(soup, tag, attr = None, query = None)   Find tag,attr,search-query on soup.
+	setOpener(url_ref)		Build opener.
+	getSoup(url)			Return soup.
+	findTag(soup, tag, attr = None, query = None)	Find tag,attr,search-query on soup.
 	checkLink(url)	  Check local-link, return list.
 	getTicket(url_page, url_wild)	Print Ticket-numbers.
 	getImgs(url_page, path)		Download 'img's to path.
-	postPass(url_post, params)	      Return response. eg, {'username':'user','password':'pass','mode':'login'}
+	postPass(url_post, params)	Return response. eg, {'username':'user','password':'pass','mode':'login'}
 function
 	download(url, path, file_name)""")
 
