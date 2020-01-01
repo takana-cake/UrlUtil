@@ -1,4 +1,4 @@
-#v.20191231.0
+#v.20200102.0
 # -*- coding: utf-8 -*-
 
 import re, glob, os
@@ -111,7 +111,6 @@ class Urlutil:
 		return r
 
 def download(url_file, path, file_name):
-	file_name = re.sub(r'[\\|/|:|?|.|"|<|>|\|]', '-', file_name)
 	if file_name[0] == "/":
 		file_name = file_name[1:]
 	if path[-1:] != "/":
