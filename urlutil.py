@@ -1,4 +1,4 @@
-#v.20200102.0
+#v.20200102.2
 # -*- coding: utf-8 -*-
 
 import re, glob, os
@@ -63,7 +63,8 @@ class Urlutil:
 		loc = parse.scheme + "://" + parse.netloc + "/"
 		locs = []
 		try:
-			links = self.getSoup(url_ck, "a")
+			soup = self.getSoup(url_ck)
+			links = findTag(soup, tag="a")
 			for i in links:
 				link = i.get("href")
 				if re.compile("^\/").search(link):
