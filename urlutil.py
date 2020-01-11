@@ -1,4 +1,4 @@
-#v.20200102.3
+#v.20200111.0
 # -*- coding: utf-8 -*-
 
 import re, glob, os
@@ -112,6 +112,7 @@ class Urlutil:
 		return r
 
 def download(url_file, path, file_name):
+	file_name = re.sub(re.compile("[!-/:-@[-`{-~]"), '', file_name)
 	if file_name[0] == "/":
 		file_name = file_name[1:]
 	if path[-1:] != "/":
