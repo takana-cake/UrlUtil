@@ -1,4 +1,4 @@
-#v.20200111.0
+#v.20200128.0
 # -*- coding: utf-8 -*-
 
 import re, glob, os
@@ -12,7 +12,7 @@ import requests
 class Urlutil:
 	def __init__(self, url_ref = ""):
 		self.ua = [
-			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/69.0.3497.100',
+			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/79.0.3945.130 Safari/537.36',
 			'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36'
 		]
 		self.setOpener(url_ref)
@@ -33,7 +33,7 @@ class Urlutil:
 		try:
 			response = urllib.request.urlopen(url_soup)
 		except Exception as e:
-			logger.debug('getSoup: ' + url_soup + ': ' + str(e) + ': ' + response.text)
+			logger.debug('getSoup: ' + url_soup + ': ' + str(e))
 			return None
 		html = response.read().decode('utf-8', errors='ignore')
 		soup = BeautifulSoup(html, 'html.parser')
@@ -54,7 +54,7 @@ class Urlutil:
 			else:
 				pages = soup.find_all(tag)
 		except Exception as e:
-			logger.debug('getSoup: ' + str(e))
+			logger.debug('findTag: ' + str(e))
 			return None
 		return pages
 
@@ -92,12 +92,13 @@ class Urlutil:
 		self.setOpener(url_page)
 		soup = self.getSoup(url_page)
 		pages = self.findTag(soup, "img")
-		for i in pages:
-			if "http" in i["src"]:
-				url_file = i["src"]
-			else:
-				url_file = os.path.dirname(url_page) + "/" + i["src"]
-			download(url_file, path, os.path.basename(i["src"]))
+		if pages:
+			for i in pages:
+				if "http" in i["src"]:
+					url_file = i["src"]
+				else:
+					url_file = os.path.dirname(url_page) + "/" + i["src"]
+				download(url_file, path, os.path.basename(i["src"]))
 
 	def postPass(self, url_post, params):
 		#link = self.getSoup(url_post, "input", "type", "password")
@@ -112,7 +113,7 @@ class Urlutil:
 		return r
 
 def download(url_file, path, file_name):
-	file_name = re.sub(re.compile("[!-/:-@[-`{-~]"), '', file_name)
+	#file_name = re.sub(re.compile("[!-/:-@[-`{-~]"), '', file_name)
 	if file_name[0] == "/":
 		file_name = file_name[1:]
 	if path[-1:] != "/":
