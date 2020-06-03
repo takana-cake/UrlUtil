@@ -1,4 +1,4 @@
-#v.20200128.0
+#v.20200604.0
 # -*- coding: utf-8 -*-
 
 import re, glob, os
@@ -98,7 +98,7 @@ class Urlutil:
 					url_file = i["src"]
 				else:
 					url_file = os.path.dirname(url_page) + "/" + i["src"]
-				download(url_file, path, os.path.basename(i["src"]))
+				DlResult = download(url_file, path, os.path.basename(i["src"]))
 
 	def postPass(self, url_post, params):
 		#link = self.getSoup(url_post, "input", "type", "password")
@@ -119,11 +119,13 @@ def download(url_file, path, file_name):
 	if path[-1:] != "/":
 		path = path + "/"
 	if glob.glob(path + file_name + "*"):
-		print(file_name + " exitsts.")
+		return file_name + " exitsts."
 	try:
 		urllib.request.urlretrieve(url_file, path + file_name)
+		return
 	except Exception as e:
 		logger.debug('download: ' + str(e))
+		return str(e)
 
 def help():
 	print("""class
@@ -137,7 +139,7 @@ method
 	getImgs(url_page, path)		Download 'img's to path.
 	postPass(url_post, params)	Return response. eg, {'username':'user','password':'pass','mode':'login'}
 function
-	download(url, path, file_name)""")
+	download(url, path, file_name)	Return result-txt.""")
 
 def _logger():
 	logger = getLogger(__name__)
