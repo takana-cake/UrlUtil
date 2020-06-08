@@ -113,11 +113,13 @@ class Urlutil:
 		return r
 
 def download(url_file, path, file_name):
-	#file_name = re.sub(re.compile("[!-/:-@[-`{-~]"), '', file_name)
 	if file_name[0] == "/":
 		file_name = file_name[1:]
 	if path[-1:] != "/":
 		path = path + "/"
+	file_name = re.sub("/", '\/', file_name)
+	#file_name = re.sub(re.compile("[!-/:-@[-`{-~]"), '', file_name)
+	file_name = re.sub(re.compile("[!-:-@[-`{-~]"), '', file_name)
 	if glob.glob(path + file_name + "*"):
 		return file_name + " exitsts."
 	try:
